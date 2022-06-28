@@ -28,6 +28,18 @@ public class HugePositiveInteger {
         digits = trimLeftZeroes(value.toCharArray());
     }
 
+    public HugePositiveInteger(char[] value) {
+        for (var i = 0; i < value.length; i++) {
+            if (!Character.isDigit(value[i])) {
+                throw new IllegalArgumentException(
+                    String.format("%s is not a digit", 
+                    value[i]));
+            }
+        }
+
+        digits = trimLeftZeroes(value);
+    }
+
     private char[] trimLeftZeroes(char[] digits) {
         int i = 0;
 
@@ -80,8 +92,28 @@ public class HugePositiveInteger {
     }
 
     public HugePositiveInteger plus(HugePositiveInteger other) {
-        // TODO
-        return new HugePositiveInteger();
+        return new HugePositiveInteger(plus(this, other));
+    }
+
+    private char[] plus(
+        HugePositiveInteger a, 
+        HugePositiveInteger b) {
+        var carry = 0;
+        var c = new char[a.digits.length];
+
+        for (var i = a.digits.length - 1; i >= 0; i--) {
+            var sum = Character.digit(a.digits[i], 10)
+             + Character.digit(b.digits[i], 10) + carry;
+
+            c[i] = Character.forDigit(sum % 10, 10);
+            carry = sum / 10;
+        }
+
+        if (carry > 0) {
+            // TODO: 
+        }
+
+        return c;
     }
 
     public HugePositiveInteger minus(HugePositiveInteger other) {
@@ -95,19 +127,24 @@ public class HugePositiveInteger {
     }
 
     public static void main(String[] args) {
-        var a = new HugePositiveInteger("00001234");
-        var b = new HugePositiveInteger("000000");
+        // var a = new HugePositiveInteger("00001234");
+        // var b = new HugePositiveInteger("000000");
 
-        var c = new HugePositiveInteger(12);
-        var d = new HugePositiveInteger(123);
+        // var c = new HugePositiveInteger(12);
+        // var d = new HugePositiveInteger(123);
 
 
-        System.out.println(a);
-        System.out.println(b);
+        // System.out.println(a);
+        // System.out.println(b);
 
-        System.out.println();
+        // System.out.println();
 
-        System.out.println(c.compareTo(d));
+        // System.out.println(c.compareTo(d));
+
+        var a = new HugePositiveInteger(9999);
+        var b = new HugePositiveInteger(9999);
+
+        System.out.println(a.plus(b));
     }
 
 
